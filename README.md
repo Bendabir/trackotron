@@ -41,10 +41,10 @@ observer = Observer(client)
 Then, any function can be decorated. The proxy will be automatically injected. By default, it will capture both the input and the output, but this can be tuned with `capture_input=False` or `capture_output=False`.
 
 ```python
-from trackotron import GenerationProxy, GenerationUpdate
+from trackotron import GenerationProxyAlias, GenerationUpdate
 
 @observer.observe(type_="generation")
-def run(proxy: GenerationProxy, model: str = "gpt-4o-mini") -> str:
+def run(proxy: GenerationProxyAlias, model: str = "gpt-4o-mini") -> str:
   # ...
   proxy.update(GenerationUpdate(model=model))
 ```

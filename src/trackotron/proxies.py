@@ -164,3 +164,9 @@ class EventProxy(ObservationProxy[StatefulClient, EventUpdate]):
     def _finalize(self) -> None:
         # Appears to be the only way to update an event...
         self.parent.event(id=self.observation.id, **self._patch)
+
+
+# Define some aliases to avoid some issues with MyPy (and reduce verbosity)
+SpanProxyAlias = ObservationProxy[StatefulSpanClient, SpanUpdate]
+GenerationProxyAlias = ObservationProxy[StatefulGenerationClient, GenerationUpdate]
+EventProxyAlias = ObservationProxy[StatefulClient, EventUpdate]
