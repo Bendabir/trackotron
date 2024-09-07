@@ -1,6 +1,5 @@
 """Copyright (c) 2024 Bendabir."""
 
-# mypy: allow-any-unimported
 from __future__ import annotations
 
 from contextvars import ContextVar
@@ -9,16 +8,15 @@ from typing import TYPE_CHECKING, Any, Literal, final, overload
 from trackotron.contexts import EventContext, GenerationContext, SpanContext
 
 if TYPE_CHECKING:
-    from langfuse.client import (
+    from trackotron.contexts import ObservationContext
+    from trackotron.types_ import ObservationType
+    from trackotron.types_.compatibility import (
         Langfuse,
+        SpanLevel,
         StatefulClient,
         StatefulGenerationClient,
         StatefulSpanClient,
     )
-    from langfuse.types import SpanLevel
-
-    from trackotron.contexts import ObservationContext
-    from trackotron.types_ import ObservationType
     from trackotron.updates import EventUpdate, GenerationUpdate, SpanUpdate
 
 

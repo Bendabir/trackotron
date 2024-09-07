@@ -1,20 +1,19 @@
 """Copyright (c) 2024 Bendabir."""
 
-# mypy: allow-any-unimported
 from __future__ import annotations
 
 import abc
 import dataclasses as dc
 from typing import Any, Generic, TypeVar, final, overload
 
-from langfuse.client import (
+from langfuse.client import StatefulTraceClient as _StatefulTraceClient
+from typing_extensions import override
+
+from trackotron.types_.compatibility import (
     StatefulClient,
     StatefulGenerationClient,
     StatefulSpanClient,
-    StatefulTraceClient,
 )
-from typing_extensions import override
-
 from trackotron.updates import (
     EventUpdate,
     GenerationUpdate,
@@ -108,7 +107,7 @@ class ObservationProxy(abc.ABC, Generic[O_co, U_contra]):
 
             # If the parent is a trace, also inject some useful data
             # Couldn't find a more elegant way to achieve this
-            if isinstance(self.parent, StatefulTraceClient):
+            if isinstance(self.parent, _StatefulTraceClient):
                 self.parent.update(
                     **{k: self._patch.get(k) for k in ("input", "output", "metadata")}
                 )

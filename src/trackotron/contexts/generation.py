@@ -5,11 +5,11 @@ from __future__ import annotations
 
 from typing import final
 
-from langfuse.client import StatefulClient, StatefulGenerationClient
 from typing_extensions import override
 
 from trackotron.contexts.context import ObservationContext
 from trackotron.proxies import GenerationProxy, ObservationProxy
+from trackotron.types_.compatibility import StatefulClient, StatefulGenerationClient
 from trackotron.updates import GenerationUpdate
 
 

@@ -1,15 +1,14 @@
 """Copyright (c) 2024 Bendabir."""
 
-# mypy: allow-any-unimported
 from __future__ import annotations
 
 from typing import final
 
-from langfuse.client import StatefulClient
 from typing_extensions import override
 
 from trackotron.contexts.context import ObservationContext
 from trackotron.proxies import EventProxy, ObservationProxy
+from trackotron.types_.compatibility import StatefulClient
 from trackotron.updates import EventUpdate
 
 

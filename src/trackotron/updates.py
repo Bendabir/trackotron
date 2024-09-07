@@ -1,6 +1,5 @@
 """Copyright (c) 2024 Bendabir."""
 
-# mypy: allow-any-unimported
 from __future__ import annotations
 
 import dataclasses as dc
@@ -11,8 +10,7 @@ if TYPE_CHECKING:
 
     import datetime as dt
 
-    from langfuse.model import ModelUsage, PromptClient
-    from langfuse.types import SpanLevel
+    from trackotron.types_.compatibility import ModelUsage, PromptClient, SpanLevel
 
 _DATACLASS_KWARGS: dict[str, Any] = {}
 

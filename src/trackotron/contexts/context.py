@@ -1,6 +1,5 @@
 """Copyright (c) 2024 Bendabir."""
 
-# mypy: allow-any-unimported
 from __future__ import annotations
 
 import abc
@@ -30,10 +29,8 @@ if TYPE_CHECKING:
     from contextvars import ContextVar
     from types import TracebackType
 
-    from langfuse.client import Langfuse, StatefulClient
-    from langfuse.types import SpanLevel
-
     from trackotron.types_ import Arguments, P, R_co
+    from trackotron.types_.compatibility import Langfuse, SpanLevel, StatefulClient
 
 U_co = TypeVar("U_co", bound=ObservationUpdate, covariant=True)
 
