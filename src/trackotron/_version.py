@@ -4,4 +4,4 @@ from __future__ import annotations
 
 from importlib.metadata import version
 
-__version__ = version("trackotron")
+__version__ = version("trackotron")  # pragma: no cover
