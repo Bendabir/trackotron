@@ -59,8 +59,10 @@ class ObservationProxy(abc.ABC, Generic[O_co, U_contra]):
         ----
         All fields over overwritten, except the metadata which is merged.
         """
-        if "metadata" in self._patch and update.metadata is not None:
-            update.metadata = {**self._patch["metadata"], **update.metadata}
+        metadata: dict[str, Any] = self._patch.get("metadata", {}) or {}
+
+        if update.metadata is not None:
+            update.metadata = {**metadata, **update.metadata}
 
         self._patch = {**self._patch, **dc.asdict(update)}
 
