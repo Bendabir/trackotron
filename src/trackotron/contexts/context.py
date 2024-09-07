@@ -221,7 +221,8 @@ class ObservationContext(
                 default_kwargs[n] = p.default
 
         return {
-            "args": [*args, *default_args],
+            # We need to remove the first N defaults when args are provided
+            "args": [*args, *default_args[len(args) :]],
             "kwargs": {**kwargs, **default_kwargs},
         }
 
