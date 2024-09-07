@@ -3,6 +3,7 @@
 # mypy: allow-any-unimported
 from __future__ import annotations
 
+from contextvars import ContextVar
 from typing import TYPE_CHECKING, Any, Literal, final, overload
 
 from trackotron.contexts import EventContext, GenerationContext, SpanContext
@@ -27,7 +28,10 @@ class Observer:
 
     def __init__(self, client: Langfuse) -> None:
         self.client = client
-        self._stack: list[StatefulClient] = []
+        self._stack: ContextVar[tuple[StatefulClient, ...]] = ContextVar(
+            "stack",
+            default=(),
+        )
 
     @overload
     def observe(

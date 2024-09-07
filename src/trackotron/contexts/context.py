@@ -27,6 +27,7 @@ from trackotron.proxies import O_co, ObservationProxy
 from trackotron.updates import ObservationUpdate
 
 if TYPE_CHECKING:
+    from contextvars import ContextVar
     from types import TracebackType
 
     from langfuse.client import Langfuse, StatefulClient
@@ -63,7 +64,7 @@ class ObservationContext(
     def __init__(
         self,
         client: Langfuse,
-        stack: list[StatefulClient],
+        stack: ContextVar[tuple[StatefulClient, ...]],
         *,
         name: str | None = None,
         metadata: dict[str, Any] | None = None,
@@ -109,8 +110,10 @@ class ObservationContext(
         if self._proxy is not None:
             raise RuntimeError("The observation context is already in use.")
 
-        if self.stack:
-            parent = self.stack[-1]
+        stack = self.stack.get()
+
+        if stack:
+            parent = stack[-1]
         else:
             parent = self.client.trace(
                 name=f"<{self.name}>" if self.name else None,
@@ -129,7 +132,7 @@ class ObservationContext(
 
         self._proxy.update(update)
 
-        self.stack.append(self._proxy.observation)
+        self.stack.set((*stack, self._proxy.observation))
 
         return self._proxy
 
@@ -141,6 +144,8 @@ class ObservationContext(
         exc_value: BaseException | None,
         traceback: TracebackType | None,
     ) -> bool | None:
+        stack = self.stack.get()
+
         if exc_value is not None:
             message = str(exc_value)
             update = ObservationUpdate(
@@ -170,7 +175,7 @@ class ObservationContext(
 
             self._proxy = None
 
-        _ = self.stack.pop()
+        self.stack.set(stack[:-1])
 
         return None
 
