@@ -5,9 +5,14 @@ from __future__ import annotations
 
 import abc
 import dataclasses as dc
-from typing import Any, Generic, TypeVar, final
+from typing import Any, Generic, TypeVar, final, overload
 
-from langfuse.client import StatefulClient, StatefulGenerationClient, StatefulSpanClient
+from langfuse.client import (
+    StatefulClient,
+    StatefulGenerationClient,
+    StatefulSpanClient,
+    StatefulTraceClient,
+)
 from typing_extensions import override
 
 from trackotron.updates import (
@@ -35,7 +40,19 @@ class ObservationProxy(abc.ABC, Generic[O_co, U_contra]):
         self._patch: dict[str, Any] = {}
 
     @final
-    def update(self, update: U_contra) -> None:
+    @property
+    def patch(self) -> dict[str, Any]:
+        """View of the internal update patch."""
+        return self._patch.copy()
+
+    @overload
+    def update(self, update: U_contra) -> None: ...
+
+    @overload
+    def update(self, update: ObservationUpdate) -> None: ...
+
+    @final
+    def update(self, update: U_contra | ObservationUpdate) -> None:
         """Store the update until finalization.
 
         Note
@@ -52,6 +69,13 @@ class ObservationProxy(abc.ABC, Generic[O_co, U_contra]):
         """Send the updates to Langfuse."""
         if self._patch:
             self._finalize()
+
+            # If the parent is a trace, also inject some useful data
+            # Couldn't find a more elegant way to achieve this
+            if isinstance(self.parent, StatefulTraceClient):
+                self.parent.update(
+                    **{k: self._patch.get(k) for k in ("input", "output", "metadata")}
+                )
 
             self._patch = {}
 
