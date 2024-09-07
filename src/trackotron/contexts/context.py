@@ -197,7 +197,10 @@ class ObservationContext(
     @final
     @staticmethod
     def _extract_arguments(
-        f: Callable[Concatenate[O_co, P], R_co],
+        f: Callable[
+            Concatenate[ObservationProxy[O_co, U_co], P],
+            R_co,
+        ],
         /,
         *args: tuple[Any, ...],
         **kwargs: dict[str, Any],
@@ -240,7 +243,10 @@ class ObservationContext(
     @final
     def _wrap_sync(
         self,
-        f: Callable[Concatenate[ObservationProxy[O_co, U_co], P], R_co],
+        f: Callable[
+            Concatenate[ObservationProxy[O_co, U_co], P],
+            R_co,
+        ],
         /,
     ) -> Callable[P, R_co]:
         @ft.wraps(f)
@@ -288,7 +294,8 @@ class ObservationContext(
     def _wrap_async(
         self,
         f: Callable[
-            Concatenate[ObservationProxy[O_co, U_co], P], Coroutine[Any, Any, R_co]
+            Concatenate[ObservationProxy[O_co, U_co], P],
+            Coroutine[Any, Any, R_co],
         ],
         /,
     ) -> Callable[P, Coroutine[Any, Any, R_co]]:
@@ -297,7 +304,10 @@ class ObservationContext(
     @overload
     def __call__(
         self,
-        f: Callable[Concatenate[ObservationProxy[O_co, U_co], P], R_co],
+        f: Callable[
+            Concatenate[ObservationProxy[O_co, U_co], P],
+            R_co,
+        ],
         /,
     ) -> Callable[P, R_co]: ...
 
@@ -305,7 +315,8 @@ class ObservationContext(
     def __call__(
         self,
         f: Callable[
-            Concatenate[ObservationProxy[O_co, U_co], P], Coroutine[Any, Any, R_co]
+            Concatenate[ObservationProxy[O_co, U_co], P],
+            Coroutine[Any, Any, R_co],
         ],
         /,
     ) -> Callable[P, Coroutine[Any, Any, R_co]]: ...
@@ -313,7 +324,10 @@ class ObservationContext(
     @final
     def __call__(
         self,
-        f: Callable[Concatenate[ObservationProxy[O_co, U_co], P], R_co],
+        f: Callable[
+            Concatenate[ObservationProxy[O_co, U_co], P],
+            R_co,
+        ],
         /,
     ) -> Callable[P, R_co] | Callable[P, Coroutine[Any, Any, R_co]]:
         """Decorate a function to observe it in Langfuse.
