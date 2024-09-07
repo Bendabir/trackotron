@@ -2,13 +2,9 @@
 
 from __future__ import annotations
 
-from typing import Any, Literal, TypeVar, final
+from typing import Any, Literal, final
 
-from typing_extensions import ParamSpec, TypedDict
-
-P = ParamSpec("P")
-R_co = TypeVar("R_co", covariant=True)
-T_contra = TypeVar("T_contra", contravariant=True)
+from typing_extensions import TypedDict
 
 ObservationType = Literal["span", "generation", "event"]
 
