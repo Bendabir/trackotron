@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 _DATACLASS_KWARGS: dict[str, Any] = {}
 
-if sys.version_info > (3, 10):
+if sys.version_info > (3, 10):  # pragma: no cover
     _DATACLASS_KWARGS["slots"] = True
 
 # NOTE : Using dataclasses as it behaves better with inheritance.
