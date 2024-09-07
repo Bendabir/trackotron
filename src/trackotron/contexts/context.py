@@ -21,7 +21,6 @@ from typing import (
 
 from typing_extensions import Concatenate, Self, override
 
-from trackotron._version import __version__
 from trackotron.proxies import O_co, ObservationProxy
 from trackotron.updates import ObservationUpdate
 
@@ -58,7 +57,7 @@ class ObservationContext(
         "version",
     )
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         client: Langfuse,
         stack: ContextVar[tuple[StatefulClient, ...]],
@@ -68,6 +67,7 @@ class ObservationContext(
         user: str | None = None,
         session: str | None = None,
         version: str | None = None,
+        release: str | None = None,
         tags: list[str] | None = None,
         level: SpanLevel | None = None,
         public: bool = True,
@@ -82,6 +82,7 @@ class ObservationContext(
         self.user = user
         self.session = session
         self.version = version
+        self.release = release
         self.tags = tags
         self.level = level
         self.public = public
@@ -118,7 +119,7 @@ class ObservationContext(
                 session_id=self.session,
                 metadata=self._metadata,
                 version=self.version,
-                release=__version__,
+                release=self.release,
                 tags=self.tags,
                 timestamp=self._now(),
                 public=self.public,

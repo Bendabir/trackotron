@@ -24,8 +24,9 @@ if TYPE_CHECKING:
 class Observer:
     """Factory to build new observation contexts."""
 
-    def __init__(self, client: Langfuse) -> None:
+    def __init__(self, client: Langfuse, *, release: str | None = None) -> None:
         self.client = client
+        self.release = release
         self._stack: ContextVar[tuple[StatefulClient, ...]] = ContextVar(
             "stack",
             default=(),
@@ -123,6 +124,7 @@ class Observer:
                 metadata=metadata,
                 user=user,
                 session=session,
+                release=self.release,
                 version=version,
                 tags=tags,
                 level=level,
@@ -139,6 +141,7 @@ class Observer:
                 user=user,
                 session=session,
                 version=version,
+                release=self.release,
                 tags=tags,
                 capture_input=capture_input,
                 capture_output=capture_output,
@@ -153,6 +156,7 @@ class Observer:
                 user=user,
                 session=session,
                 version=version,
+                release=self.release,
                 tags=tags,
                 capture_input=capture_input,
                 capture_output=capture_output,
