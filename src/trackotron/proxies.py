@@ -62,21 +62,39 @@ class ObservationProxy(abc.ABC, Generic[O_co, U_contra]):
         comment: str | None = None,
     ) -> None: ...
 
+    @overload
+    def score(
+        self,
+        name: str,
+        value: str,
+        *,
+        comment: str | None = None,
+    ) -> None: ...
+
     @final
     def score(
         self,
         name: str,
-        value: float | bool,  # noqa: FBT001
+        value: float | bool | str,  # noqa: FBT001
         *,
         comment: str | None = None,
     ) -> None:
         """Add a score to the current observation."""
-        self.observation.score(
-            name=name,
-            value=float(value),
-            data_type="BOOLEAN" if isinstance(value, bool) else "NUMERIC",
-            comment=comment,
-        )
+        # No other choice than checking, not sure we can trust the SDK
+        if isinstance(value, str):
+            self.observation.score(
+                name=name,
+                value=value,
+                data_type="CATEGORICAL",
+                comment=comment,
+            )
+        else:
+            self.observation.score(
+                name=name,
+                value=float(value),
+                data_type="BOOLEAN" if isinstance(value, bool) else "NUMERIC",
+                comment=comment,
+            )
 
     @overload
     def update(self, update: U_contra) -> None: ...
