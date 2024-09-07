@@ -1,7 +1,6 @@
 """Copyright (c) 2024 Bendabir."""
 
 # mypy: allow-any-unimported
-
 from __future__ import annotations
 
 import dataclasses as dc
