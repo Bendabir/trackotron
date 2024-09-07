@@ -1,0 +1,12 @@
+**/__pycache__
+*.pyc
+**/.mypy_cache
+**/.mypy_cache_vscode
+**/.ruff_cache
+**/.ruff_cache_vscode
+**/.pytest_cache
+**/.pytest_cache_vscode
+**/dist
+**/build
+**/*.egg-info
+poetry.lock
