@@ -46,6 +46,40 @@ class ObservationProxy(abc.ABC, Generic[O_co, U_contra]):
         return self._patch.copy()
 
     @overload
+    def score(
+        self,
+        name: str,
+        value: bool,  # noqa: FBT001
+        *,
+        comment: str | None = None,
+    ) -> None: ...
+
+    @overload
+    def score(
+        self,
+        name: str,
+        value: float,
+        *,
+        comment: str | None = None,
+    ) -> None: ...
+
+    @final
+    def score(
+        self,
+        name: str,
+        value: float | bool,  # noqa: FBT001
+        *,
+        comment: str | None = None,
+    ) -> None:
+        """Add a score to the current observation."""
+        self.observation.score(
+            name=name,
+            value=float(value),
+            data_type="BOOLEAN" if isinstance(value, bool) else "NUMERIC",
+            comment=comment,
+        )
+
+    @overload
     def update(self, update: U_contra) -> None: ...
 
     @overload
