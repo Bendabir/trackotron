@@ -148,7 +148,17 @@ select = [
     "W",     # pycodestyle warnings
     "YTT",   # flake8-2020
 ]
-ignore = ["ANN401", "COM812", "D100", "D104", "D105", "TD001", "TD002", "TD003"]
+ignore = [
+    "ANN401",
+    "COM812",
+    "D100",
+    "D104",
+    "D105",
+    "TD001",
+    "TD002",
+    "TD003",
+    "TRY003",
+]
 unfixable = ["ERA001"]
 
 [tool.ruff.lint.per-file-ignores]

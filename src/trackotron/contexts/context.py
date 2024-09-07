@@ -107,9 +107,7 @@ class ObservationContext(
     def __enter__(self) -> ObservationProxy[O_co, U_co]:
         # TODO : Support reuse with an internal stack  # noqa: FIX002
         if self._proxy is not None:
-            raise RuntimeError(  # noqa: TRY003
-                "The observation context is already in use."
-            )
+            raise RuntimeError("The observation context is already in use.")
 
         if self.stack:
             parent = self.stack[-1]
