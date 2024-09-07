@@ -29,7 +29,8 @@ if TYPE_CHECKING:
     from types import TracebackType
 
     from trackotron.types_ import Arguments, P, R_co
-    from trackotron.types_.compatibility import Langfuse, SpanLevel, StatefulClient
+    from trackotron.types_.compatibility import Langfuse, StatefulClient
+    from trackotron.types_.misc import ObservationParameters, TraceParameters
 
 U_co = TypeVar("U_co", bound=ObservationUpdate, covariant=True)
 
@@ -57,20 +58,14 @@ class ObservationContext(
         "version",
     )
 
-    def __init__(  # noqa: PLR0913
+    def __init__(
         self,
         client: Langfuse,
         stack: ContextVar[tuple[StatefulClient, ...]],
         *,
         name: str | None = None,
-        metadata: dict[str, Any] | None = None,
-        user: str | None = None,
-        session: str | None = None,
-        version: str | None = None,
-        release: str | None = None,
-        tags: list[str] | None = None,
-        level: SpanLevel | None = None,
-        public: bool = True,
+        trace: TraceParameters | None = None,
+        observation: ObservationParameters | None = None,
         capture_input: bool = True,
         capture_output: bool = True,
     ) -> None:
@@ -79,17 +74,11 @@ class ObservationContext(
         self.client = client
         self.stack = stack
         self.name = name
-        self.user = user
-        self.session = session
-        self.version = version
-        self.release = release
-        self.tags = tags
-        self.level = level
-        self.public = public
+        self.trace = trace or {}
+        self.observation = observation or {}
         self.capture_input = capture_input
         self.capture_output = capture_output
 
-        self._metadata = metadata  # Will be used as a default
         self._proxy: ObservationProxy[O_co, U_co] | None = None
 
     @final
@@ -109,24 +98,26 @@ class ObservationContext(
             raise RuntimeError("The observation context is already in use.")
 
         stack = self.stack.get()
+        metadata = self.observation.get("metadata")
 
         if stack:
             parent = stack[-1]
         else:
             parent = self.client.trace(
                 name=f"<{self.name}>" if self.name else None,
-                user_id=self.user,
-                session_id=self.session,
-                metadata=self._metadata,
-                version=self.version,
-                release=self.release,
-                tags=self.tags,
+                user_id=self.trace.get("user"),
+                session_id=self.trace.get("session"),
+                # Ensure consistency with the observation
+                metadata=metadata,
+                version=self.observation.get("version"),
+                release=self.trace.get("release"),
+                tags=self.trace.get("tags"),
                 timestamp=self._now(),
-                public=self.public,
+                public=self.trace.get("public"),
             )
 
         self._proxy = self._new_proxy(parent)
-        update = ObservationUpdate(metadata=self._metadata)
+        update = ObservationUpdate(metadata=metadata)
 
         self._proxy.update(update)
 

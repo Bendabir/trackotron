@@ -25,8 +25,8 @@ class EventContext(ObservationContext[StatefulClient, EventUpdate]):
             parent.event(
                 name=self.name,
                 start_time=self._now(),
-                version=self.version,
-                level=self.level,
+                version=self.observation.get("version"),
+                level=self.observation.get("level"),
             ),
             parent,
         )

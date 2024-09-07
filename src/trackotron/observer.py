@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from contextvars import ContextVar
-from typing import TYPE_CHECKING, Any, Literal, final, overload
+from typing import TYPE_CHECKING, Literal, final, overload
 
 from trackotron.contexts import EventContext, GenerationContext, SpanContext
 
@@ -12,11 +12,11 @@ if TYPE_CHECKING:
     from trackotron.types_ import ObservationType
     from trackotron.types_.compatibility import (
         Langfuse,
-        SpanLevel,
         StatefulClient,
         StatefulGenerationClient,
         StatefulSpanClient,
     )
+    from trackotron.types_.misc import ObservationParameters, TraceParameters
     from trackotron.updates import EventUpdate, GenerationUpdate, SpanUpdate
 
 
@@ -38,12 +38,8 @@ class Observer:
         *,
         type_: Literal["span"] = "span",
         name: str | None = None,
-        metadata: dict[str, Any] | None = None,
-        user: str | None = None,
-        session: str | None = None,
-        version: str | None = None,
-        tags: list[str] | None = None,
-        level: SpanLevel | None = None,
+        trace: TraceParameters | None = None,
+        observation: ObservationParameters | None = None,
         capture_input: bool = True,
         capture_output: bool = True,
     ) -> ObservationContext[StatefulSpanClient, SpanUpdate]: ...
@@ -54,12 +50,8 @@ class Observer:
         *,
         type_: Literal["generation"],
         name: str | None = None,
-        metadata: dict[str, Any] | None = None,
-        user: str | None = None,
-        session: str | None = None,
-        version: str | None = None,
-        tags: list[str] | None = None,
-        level: SpanLevel | None = None,
+        trace: TraceParameters | None = None,
+        observation: ObservationParameters | None = None,
         capture_input: bool = True,
         capture_output: bool = True,
     ) -> ObservationContext[StatefulGenerationClient, GenerationUpdate]: ...
@@ -70,12 +62,8 @@ class Observer:
         *,
         type_: Literal["event"],
         name: str | None = None,
-        metadata: dict[str, Any] | None = None,
-        user: str | None = None,
-        session: str | None = None,
-        version: str | None = None,
-        tags: list[str] | None = None,
-        level: SpanLevel | None = None,
+        trace: TraceParameters | None = None,
+        observation: ObservationParameters | None = None,
         capture_input: bool = True,
         capture_output: bool = True,
     ) -> ObservationContext[StatefulClient, EventUpdate]: ...
@@ -85,12 +73,8 @@ class Observer:
         *,
         type_: ObservationType = "span",
         name: str | None = None,
-        metadata: dict[str, Any] | None = None,
-        user: str | None = None,
-        session: str | None = None,
-        version: str | None = None,
-        tags: list[str] | None = None,
-        level: SpanLevel | None = None,
+        trace: TraceParameters | None = None,
+        observation: ObservationParameters | None = None,
         capture_input: bool = True,
         capture_output: bool = True,
     ) -> ObservationContext[
@@ -116,18 +100,16 @@ class Observer:
         ValueError
             If the observation type cannot be understood.
         """
+        if trace and "release" not in trace and self.release:
+            trace["release"] = self.release
+
         if type_ == "span":
             return SpanContext(
                 client=self.client,
                 stack=self._stack,
                 name=name,
-                metadata=metadata,
-                user=user,
-                session=session,
-                release=self.release,
-                version=version,
-                tags=tags,
-                level=level,
+                trace=trace,
+                observation=observation,
                 capture_input=capture_input,
                 capture_output=capture_output,
             )
@@ -137,12 +119,8 @@ class Observer:
                 client=self.client,
                 stack=self._stack,
                 name=name,
-                metadata=metadata,
-                user=user,
-                session=session,
-                version=version,
-                release=self.release,
-                tags=tags,
+                trace=trace,
+                observation=observation,
                 capture_input=capture_input,
                 capture_output=capture_output,
             )
@@ -152,12 +130,8 @@ class Observer:
                 client=self.client,
                 stack=self._stack,
                 name=name,
-                metadata=metadata,
-                user=user,
-                session=session,
-                version=version,
-                release=self.release,
-                tags=tags,
+                trace=trace,
+                observation=observation,
                 capture_input=capture_input,
                 capture_output=capture_output,
             )

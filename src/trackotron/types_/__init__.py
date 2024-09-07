@@ -14,12 +14,13 @@ from .compatibility import (
     StatefulTraceClient,
 )
 from .generics import P, R_co, T_contra
-from .misc import Arguments, ObservationType
+from .misc import Arguments, ObservationParameters, ObservationType, TraceParameters
 
 __all__ = [
     "Arguments",
     "Langfuse",
     "ModelUsage",
+    "ObservationParameters",
     "ObservationType",
     "P",
     "PromptClient",
@@ -31,4 +32,5 @@ __all__ = [
     "StatefulSpanClient",
     "StatefulTraceClient",
     "T_contra",
+    "TraceParameters",
 ]

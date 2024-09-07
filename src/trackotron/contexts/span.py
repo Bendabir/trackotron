@@ -25,8 +25,8 @@ class SpanContext(ObservationContext[StatefulSpanClient, SpanUpdate]):
             parent.span(
                 name=self.name,
                 start_time=self._now(),
-                version=self.version,
-                level=self.level,
+                version=self.observation.get("version"),
+                level=self.observation.get("level"),
             ),
             parent,
         )

@@ -26,7 +26,8 @@ class GenerationContext(ObservationContext[StatefulGenerationClient, GenerationU
             parent.generation(
                 name=self.name,
                 start_time=self._now(),
-                version=self.version,
+                version=self.observation.get("version"),
+                level=self.observation.get("level"),
                 model="<model>",
                 model_parameters={
                     "PARAMETER": "<value>",
@@ -37,7 +38,6 @@ class GenerationContext(ObservationContext[StatefulGenerationClient, GenerationU
                     "total": 0,
                     "unit": "TOKENS",
                 },
-                level=self.level,
             ),
             parent,
         )
