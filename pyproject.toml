@@ -213,7 +213,7 @@ testpaths = ["tests/unit"]
 
 # --- coverage ---
 [tool.coverage.run]
-omit = ["tests/*", "src/**/__init__.py"]
+omit = ["tests/*", "src/**/__init__.py", "src/**/types_/compatibility.py"]
 branch = true
 disable_warnings = ["no-data-collected"]
 
