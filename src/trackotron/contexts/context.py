@@ -124,14 +124,14 @@ class ObservationContext(
                 public=self.public,
             )
 
-        proxy = self._new_proxy(parent)
+        self._proxy = self._new_proxy(parent)
         update = ObservationUpdate(metadata=self._metadata)
 
-        proxy.update(update)
+        self._proxy.update(update)
 
-        self.stack.append(proxy.observation)
+        self.stack.append(self._proxy.observation)
 
-        return proxy
+        return self._proxy
 
     @final
     @override
