@@ -43,6 +43,7 @@ preview = false
 [tool.mypy]
 local_partial_types = true
 python_version = "3.8"
+mypy_path = "src/,tests/"
 scripts_are_modules = true
 ignore_missing_imports = true
 namespace_packages = true
@@ -87,6 +88,7 @@ line-length = 88
 target-version = "py38"
 indent-width = 4
 preview = true
+namespace-packages = ["src/trackotron"]
 
 [tool.ruff.lint]
 task-tags = ["TODO", "FIXME", "NOTE"]
