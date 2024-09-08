@@ -8,4 +8,5 @@ from typing_extensions import ParamSpec
 
 P = ParamSpec("P")
 R_co = TypeVar("R_co", covariant=True)
-T_contra = TypeVar("T_contra", contravariant=True)
+C = TypeVar("C")
+I = TypeVar("I")
