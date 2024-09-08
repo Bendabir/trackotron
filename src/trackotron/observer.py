@@ -5,6 +5,8 @@ from __future__ import annotations
 from contextvars import ContextVar
 from typing import TYPE_CHECKING, Literal, final, overload
 
+from typing_extensions import Unpack
+
 from trackotron.contexts import EventContext, GenerationContext, SpanContext
 
 if TYPE_CHECKING:
@@ -24,9 +26,9 @@ if TYPE_CHECKING:
 class Observer:
     """Factory to build new observation contexts."""
 
-    def __init__(self, client: Langfuse, *, release: str | None = None) -> None:
+    def __init__(self, client: Langfuse, **trace: Unpack[TraceParameters]) -> None:
         self.client = client
-        self.release = release
+        self.trace = trace
         self._stack: ContextVar[tuple[StatefulClient, ...]] = ContextVar(
             "stack",
             default=(),
@@ -100,8 +102,9 @@ class Observer:
         ValueError
             If the observation type cannot be understood.
         """
-        if trace and "release" not in trace and self.release:
-            trace["release"] = self.release
+        # Inject some defaults if not provided
+        if self.trace:
+            trace = {**self.trace, **(trace or {})}
 
         if type_ == "span":
             return SpanContext(
