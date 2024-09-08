@@ -1,0 +1,26 @@
+name: "Setup the whole env"
+description: "Setup the env with packages"
+branding:
+  icon: box
+  color: gray-dark
+inputs:
+  python-version:
+    description: "Version of Python to install"
+    required: true
+  poetry-version:
+    description: "Version of Poetry to install"
+    required: false
+    default: "1.8.3"
+runs:
+  using: composite
+  steps:
+    - run: pipx install poetry==${{ inputs.poetry-version }}
+      shell: bash
+    - run: poetry lock
+      shell: bash
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: poetry
+    - run: poetry install --with dev --no-interaction --no-ansi
+      shell: bash

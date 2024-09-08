@@ -1,0 +1,35 @@
+name: Publish
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+      python-version:
+        required: true
+        type: string
+      poetry-version:
+        required: true
+        type: string
+jobs:
+  quality:
+    runs-on: ${{ inputs.os }}
+    name: Publish (${{ inputs.os }}, python${{ inputs.python-version }})
+    environment:
+      name: release
+      url: https://pypi.org/project/trackotron
+    steps:
+      - name: Synchronize repository
+        uses: actions/checkout@v4
+      - name: Setup Python ${{ inputs.python-version }} with Poetry ${{ inputs.poetry-version }}
+        uses: ./.github/actions/setup-env
+        with:
+          python-version: ${{ inputs.python-version }}
+          poetry-version: ${{ inputs.poetry-version }}
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-dists
+          path: dist/
+      - name: Publish library
+        uses: pypa/gh-action-pypi-publish@release/v1

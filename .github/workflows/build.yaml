@@ -1,0 +1,32 @@
+name: Build
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+      python-version:
+        required: true
+        type: string
+      poetry-version:
+        required: true
+        type: string
+jobs:
+  quality:
+    runs-on: ${{ inputs.os }}
+    name: Build (${{ inputs.os }}, python${{ inputs.python-version }})
+    steps:
+      - name: Synchronize repository
+        uses: actions/checkout@v4
+      - name: Setup Python ${{ inputs.python-version }} with Poetry ${{ inputs.poetry-version }}
+        uses: ./.github/actions/setup-env
+        with:
+          python-version: ${{ inputs.python-version }}
+          poetry-version: ${{ inputs.poetry-version }}
+      - name: Build
+        run: poetry build -f wheel
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-dists
+          path: dist/
