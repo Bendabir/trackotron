@@ -8,7 +8,6 @@ jobs:
   quality:
     name: Quality (python${{ matrix.python-version }})
     uses: ./.github/workflows/quality.yaml
-    if: github.event_name == 'pull_request'
     strategy:
       fail-fast: false
       matrix:
@@ -20,7 +19,6 @@ jobs:
   test:
     name: Test (python${{ matrix.python-version }})
     uses: ./.github/workflows/test.yaml
-    if: github.event_name == 'pull_request'
     strategy:
       fail-fast: false
       matrix:

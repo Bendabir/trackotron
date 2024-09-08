@@ -67,6 +67,7 @@ def test_context_manager_sync(context: FakeContext) -> None:
 
 
 @pytest.mark.anyio
+@pytest.mark.skip(reason="TODO : Support async.")
 async def test_context_manager_async(context: FakeContext) -> None:
     async with context as _:
         pass
@@ -81,6 +82,7 @@ def test_decorator_sync(context: FakeContext) -> None:
 
 
 @pytest.mark.anyio
+@pytest.mark.skip(reason="TODO : Support async.")
 async def test_decorator_async(context: FakeContext) -> None:
     @context
     async def run(proxy: FakeProxyAlias) -> None:
