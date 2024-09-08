@@ -14,6 +14,9 @@ Improved decorator for Langfuse. It aims to address some issues of the official 
 - Inconsistant behavior between traces and observations
 - Poor error handling
 
+> [!WARNING]
+> This is still very experimental and definitely not production ready.
+
 ## Installation
 
 First, install the package with your favorie package manager (`pip`, `poetry`, etc.).
@@ -57,9 +60,21 @@ with observer.observe(name="context") as proxy:
   proxy.score("perplexity", 1.0, comment="Lorem ipsum")
 ```
 
+### Limitations
+
+The decorator currently only supports functions. Instance and class methods are not supported regarding typing (but it should work).
+
+Coroutines are not supported yet but it should be pretty straight forward to implement. The only issue is to find a way to avoid code duplication.
+
 ## Performances
 
-**TODO :** Overhead appears to be around 0.25% (compared to raw code).
+The overhead appears to be quite small. The scripts ([`benchmark`](./scripts/benchmark.py) and [`baseline`](./scripts/baseline.py)) are used to quickly measure performances of Langfuse (both when enabled or disabled) compared to a raw script. It contains some sleeps (1.50s) to fake some execution or I/O.
+
+| Baseline | Langfuse Disabled | Langfuse Enabled        |
+| -------- | ----------------- | ----------------------- |
+| 1.5017   | 1.5062 (+0.30%)   | 1.5080 (+0.42%, +0.12%) |
+
+The overhead is between 0.30% and 0.42% (depending if Langfuse is enabled). This should be pretty okay for most of the LLM applications which often only do HTTP calls.
 
 ## Development
 
@@ -91,3 +106,13 @@ poetry run python -m pytest --cov=src/trackotron tests # Run all tests
 ```bash
 poetry build -f wheel
 ```
+
+### TODOs
+
+Here are some ideas to improve the current decorator :
+
+- [ ] Support coroutines
+- [ ] Fix typing for instance and class methods
+- [ ] Make the proxy injection optional (_i.e._ do not inject the proxy if not present in the function/method signature)
+- [ ] Add more tests to ensure behaviors and consistency
+- [ ] Support context reuse if that makes sense
