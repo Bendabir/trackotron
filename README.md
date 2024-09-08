@@ -116,3 +116,4 @@ Here are some ideas to improve the current decorator :
 - [ ] Make the proxy injection optional (_i.e._ do not inject the proxy if not present in the function/method signature)
 - [ ] Add more tests to ensure behaviors and consistency
 - [ ] Support context reuse if that makes sense
+- [ ] Handle data obfuscation when needed so we don't expose secrets.
