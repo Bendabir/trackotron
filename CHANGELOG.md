@@ -7,8 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Typing has been improved.
+
+## [0.1.0]
+
 ### Added
 
 - Various observations contexts to track code.
 
-[Unreleased]: https://github.com/bendabir/trackotron/tree/develop
+[Unreleased]: https://github.com/bendabir/trackotron/compare/0.1.0...main
+[0.1.0]: https://github.com/bendabir/trackotron/tree/0.1.0
