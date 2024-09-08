@@ -45,6 +45,7 @@ preview = false
 local_partial_types = true
 python_version = "3.8"
 mypy_path = "src/,tests/"
+files = "**/src/**/*.py,**/tests/**/*.py"
 scripts_are_modules = true
 ignore_missing_imports = true
 namespace_packages = true
@@ -90,6 +91,7 @@ target-version = "py38"
 indent-width = 4
 preview = true
 namespace-packages = ["src/trackotron"]
+include = ["**/src/**/*.py", "**/tests/**/*.py", "**/pyproject.toml"]
 
 [tool.ruff.lint]
 task-tags = ["TODO", "FIXME", "NOTE"]
