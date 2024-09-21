@@ -1,7 +1,7 @@
 # --- poetry ---
 [tool.poetry]
 name = "trackotron"
-version = "0.1.0"
+version = "0.2.0"
 description = "Improved decorator for Langfuse."
 license = "GPL-3.0-or-later"
 authors = ["Bendabir"]
@@ -37,13 +37,13 @@ build-backend = "poetry.core.masonry.api"
 # --- black ---
 [tool.black]
 line-length = 88
-target-version = ["py38"]
+target-version = ["py39"]
 preview = false
 
 # --- mypy ---
 [tool.mypy]
 local_partial_types = true
-python_version = "3.8"
+python_version = "3.9"
 mypy_path = "src/,tests/"
 files = "**/src/**/*.py,**/tests/**/*.py"
 scripts_are_modules = true
@@ -79,15 +79,10 @@ enable_error_code = [
     "unused-awaitable",
 ]
 
-[tool.pydantic-mypy]
-init_typed = false
-init_forbid_extra = true
-warn_required_dynamic_aliases = true
-
 # --- ruff ---
 [tool.ruff]
 line-length = 88
-target-version = "py38"
+target-version = "py39"
 indent-width = 4
 preview = true
 namespace-packages = ["src/trackotron"]

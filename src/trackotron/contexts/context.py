@@ -12,7 +12,6 @@ from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
-    Coroutine,
     Generic,
     TypeVar,
     final,
@@ -28,9 +27,18 @@ if TYPE_CHECKING:
     from contextvars import ContextVar
     from types import TracebackType
 
-    from trackotron.types_ import Arguments, P, R_co
+    from trackotron.types_ import (
+        Arguments,
+        AsyncFunction,
+        AsyncInjectedFunction,
+        Function,
+        InjectedFunction,
+        ObservationParameters,
+        P,
+        R_co,
+        TraceParameters,
+    )
     from trackotron.types_.compatibility import Langfuse, StatefulClient
-    from trackotron.types_.misc import ObservationParameters, TraceParameters
 
 U_co = TypeVar("U_co", bound=ObservationUpdate, covariant=True)
 
@@ -238,12 +246,9 @@ class ObservationContext(
     @final
     def _wrap_sync(
         self,
-        f: Callable[
-            Concatenate[ObservationProxy[O_co, U_co], P],
-            R_co,
-        ],
+        f: InjectedFunction[ObservationProxy[O_co, U_co], P, R_co],
         /,
-    ) -> Callable[P, R_co]:
+    ) -> Function[P, R_co]:
         @ft.wraps(f)
         def wrap(*args: Any, **kwargs: Any) -> R_co:
             with self._context() as proxy:
@@ -288,43 +293,31 @@ class ObservationContext(
     @final
     def _wrap_async(
         self,
-        f: Callable[
-            Concatenate[ObservationProxy[O_co, U_co], P],
-            Coroutine[Any, Any, R_co],
-        ],
+        f: AsyncInjectedFunction[ObservationProxy[O_co, U_co], P, R_co],
         /,
-    ) -> Callable[P, Coroutine[Any, Any, R_co]]:
+    ) -> AsyncFunction[P, R_co]:
         raise NotImplementedError
 
     @overload
     def __call__(
         self,
-        f: Callable[
-            Concatenate[ObservationProxy[O_co, U_co], P],
-            R_co,
-        ],
+        f: InjectedFunction[ObservationProxy[O_co, U_co], P, R_co],
         /,
-    ) -> Callable[P, R_co]: ...
+    ) -> Function[P, R_co]: ...
 
     @overload
     def __call__(
         self,
-        f: Callable[
-            Concatenate[ObservationProxy[O_co, U_co], P],
-            Coroutine[Any, Any, R_co],
-        ],
+        f: AsyncInjectedFunction[ObservationProxy[O_co, U_co], P, R_co],
         /,
-    ) -> Callable[P, Coroutine[Any, Any, R_co]]: ...
+    ) -> AsyncFunction[P, R_co]: ...
 
     @final
     def __call__(
         self,
-        f: Callable[
-            Concatenate[ObservationProxy[O_co, U_co], P],
-            R_co,
-        ],
+        f: InjectedFunction[ObservationProxy[O_co, U_co], P, R_co],
         /,
-    ) -> Callable[P, R_co] | Callable[P, Coroutine[Any, Any, R_co]]:
+    ) -> Function[P, R_co] | AsyncFunction[P, R_co]:
         """Decorate a function to observe it in Langfuse.
 
         If the name was not provided, it will infer it from the function/method.

@@ -2,6 +2,20 @@
 
 from __future__ import annotations
 
+from .aliases import (
+    AsyncClassMethod,
+    AsyncFunction,
+    AsyncInjectedClassMethod,
+    AsyncInjectedFunction,
+    AsyncInjectedMethod,
+    AsyncMethod,
+    ClassMethod,
+    Function,
+    InjectedClassMethod,
+    InjectedFunction,
+    InjectedMethod,
+    Method,
+)
 from .compatibility import (
     Langfuse,
     ModelUsage,
@@ -13,12 +27,26 @@ from .compatibility import (
     StatefulSpanClient,
     StatefulTraceClient,
 )
-from .generics import P, R_co, T_contra
+from .generics import C, I, P, R_co
 from .misc import Arguments, ObservationParameters, ObservationType, TraceParameters
 
 __all__ = [
     "Arguments",
+    "AsyncClassMethod",
+    "AsyncFunction",
+    "AsyncInjectedClassMethod",
+    "AsyncInjectedFunction",
+    "AsyncInjectedMethod",
+    "AsyncMethod",
+    "C",
+    "ClassMethod",
+    "Function",
+    "I",
+    "InjectedClassMethod",
+    "InjectedFunction",
+    "InjectedMethod",
     "Langfuse",
+    "Method",
     "ModelUsage",
     "ObservationParameters",
     "ObservationType",
@@ -31,6 +59,5 @@ __all__ = [
     "StatefulGenerationClient",
     "StatefulSpanClient",
     "StatefulTraceClient",
-    "T_contra",
     "TraceParameters",
 ]

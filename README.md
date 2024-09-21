@@ -117,3 +117,4 @@ Here are some ideas to improve the current decorator :
 - [ ] Add more tests to ensure behaviors and consistency
 - [ ] Support context reuse if that makes sense
 - [ ] Handle data obfuscation when needed so we don't expose secrets.
+- [ ] Make parenthesis usage optional (see [#918](https://github.com/langfuse/langfuse-python/pull/918))
